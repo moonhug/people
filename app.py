@@ -27,5 +27,11 @@ def set_user():
     return resp
 
 
+@app.route('/admin/createdb')
+def createdb():
+    Base.metadata.create_all(engine)
+    return redirect(url_for('home'))
+
+
 if __name__ == "__main__":
     app.run()
