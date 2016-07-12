@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>피플 만들기</h2>
+<form action="{{ url_for('new_people') }}" method="post">
+    <div>
+        <label for="name">이름:</label>
+        <input type="text" id="name" name="name" />
+    </div>
+    <div>
+        <label for="gender">성별:</label>
+        <select name="gender">
+            <option value="male">남자</option>
+            <option value="female">여자</option>
+            <option value="transgender">TG</option>
+            <option value="genderqueer">젠더퀴어</option>
+        </select>
+    </div>
+    <div>
+        <label for="sex_orientation">지향성:</label>
+        <select name="sex_orientation">
+            <option value="hetero">이성애</option>
+            <option value="homo">동성애</option>
+            <option value="bi">양성애</option>
+            <option value="asexual">무성애</option>
+            <option value="pan">범성애</option>
+        </select>
+    </div>
+    <div>
+        <label for="bloodtype">혈액형:</label>
+        <select name="bloodtype">
+            <option value="A">A형</option>
+            <option value="B">B형</option>
+            <option value="O">O형</option>
+            <option value="AB">AB형</option>
+        </select>
+    </div>
+    <button type="submit">피플 만들기</button>
+</form>
+{% endblock %}

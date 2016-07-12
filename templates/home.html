@@ -1,33 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if username %}
-<p>{{ username }}님 반갑습니다!</p>
-{% endif %}
-{% if userbirth %}
-<p>당신의 생년월일은 {{ userbirth }}입니다.</p>
-{% endif %}
-{% if userblood %}
-<p>당신의 혈액형은 {{ userblood }}형 입니다.</p>
-{% endif %}
-<form action="/set-user/" method="post">
-    <div>
-        <label for="name">이름:</label>
-        <input value="{% if username %}{{ username }}{% endif %}" type="text" id="username" name="username" />
-    </div>
-    <div>
-        <label for="birthday">생년월일:</label>
-        <input value="{% if userbirth %}{{ userbirth }}{% endif %}" type="date" id="userbirth" name="userbirth" />
-    </div>
-    <div>
-        <label for="bloodtype">혈액형:</label>
-        <select name="userblood">
-            <option value="A" {% if userblood == 'A' %}selected{% endif %}>A형</option>
-            <option value="B" {% if userblood == 'B' %}selected{% endif %}>B형</option>
-            <option value="O" {% if userblood == 'O' %}selected{% endif %}>O형</option>
-            <option value="AB" {% if userblood == 'AB' %}selected{% endif %}>AB형</option>
-        </select>
-    </div>
-    <button type="submit">저장</button>
-</form>
+
+<h2>피플에 오신걸 환영합니다.</h2>
+<p>
+    <a href="{{ url_for('new_user_form') }}">회원가입</a>
+</p>
+<p>
+    <a href="{{ url_for("login") }}">로그인</a>
+</p>
 {% endblock %}

@@ -1,18 +1,80 @@
-from flask import (Flask, render_template, request, make_response, redirect,
-                   url_for)
+from flask import (Flask, flash, render_template, request, session,
+                   make_response, redirect, url_for)
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.ext.declarative import declarative_base
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
+
+Base = declarative_base()
+engine = create_engine('sqlite:///db.db', echo=True)
+Session = sessionmaker()
+Session.configure(bind=engine)
+db = Session()
+
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    account = Column(String, unique=True)
+    password = Column(String)
+    people = relationship("People", back_populates="user")
+
+    def __init__(self, account, password):
+        self.account = account
+        self.password = password
+
+    def __repr__(self):
+        return "<User('%s', '%s')>" % (self.account, self.password)
+
+
+class People(Base):
+    __tablename__ = 'people'
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
+    gender = Column(String)
+    sex_orientation = Column(String)
+    blood = Column(String)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="people")
+
+    def __init__(self, name, gender, sex_orientation, blood, user_id):
+        self.name = name
+        self.gender = gender
+        self.sex_orientation = sex_orientation
+        self.blood = blood
+        self.user_id = user_id
+
+    def __repr__(self):
+        return "<People('%s', '%s', '%s', '%s')>" \
+               % (self.name, self.gender, self.sex_orientation, self.blood)
 
 
 app = Flask(__name__)
+app.config.from_pyfile('application.cfg')
+
+
+def get_user(username):
+    user = db.query(User).filter(User.account == username).one_or_none()
+    return user
+
+
+def get_current_user():
+    username = session.get('username', None)
+    if username:
+        user = get_user(username)
+        return user
 
 
 @app.route("/")
 def home():
-    username = request.cookies.get('username')
-    userbirth = request.cookies.get('userbirth')
-    userblood = request.cookies.get('userblood')
-    return render_template("home.html", username=username,
-                           userbirth=userbirth,
-                           userblood=userblood)
+    user = get_current_user()
+    if user:
+        people = user.people
+        return render_template("people_list.html", people=people)
+    else:
+        return render_template("home.html")
 
 
 @app.route("/set-user/", methods=['POST'])
@@ -25,6 +87,98 @@ def set_user():
     resp.set_cookie('userbirth', userbirth)
     resp.set_cookie('userblood', userblood)
     return resp
+
+
+@app.route('/logout/')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('home'))
+
+
+@app.route('/login/')
+def login_form():
+    return render_template("login.html")
+
+
+@app.route("/login/", methods=['POST'])
+def login():
+    userid = request.form.get('userid')
+    userpw = request.form.get('userpw')
+    if userid and userpw:
+        user = get_user(userid)
+        if user:
+            ph = PasswordHasher()
+            try:
+                ph.verify(user.password, userpw)
+            except VerifyMismatchError:
+                flash('check account or password')
+            else:
+                session['username'] = user.account
+                flash('welcome back!')
+                return redirect(url_for('home'))
+        else:
+            flash('check account or password')
+    else:
+        flash('account id or password is blank.')
+    return redirect(url_for('login'))
+
+
+@app.route('/join/', methods=['POST'])
+def new_user():
+    userid = request.form.get('userid')
+    userpw = request.form.get('userpw')
+    if userid and userpw:
+        if db.query(User).filter(User.account == userid).first():
+            flash('id already exists')
+        else:
+            ph = PasswordHasher()
+            hash = ph.hash(userpw)
+            user = User(userid, hash)
+            db.add(user)
+            db.commit()
+            session['username'] = user.account
+            flash('welcome to people!')
+            return redirect(url_for('home'))
+    else:
+        flash('account id or password is blank.')
+    return redirect(url_for('new_user'))
+
+
+@app.route("/join/")
+def new_user_form():
+    return render_template('join.html')
+
+
+@app.route("/peoplejoin/")
+def new_people_form():
+    return render_template('people_join.html')
+
+
+@app.route('/peoplejoin/', methods=['POST'])
+def new_people():
+    name = request.form.get('name')
+    gender = request.form.get('gender')
+    sex_orientation = request.form.get('sex_orientation')
+    bloodtype = request.form.get('bloodtype')
+    if name:
+        if db.query(People).filter(People.name == name).first():
+            flash('name already exists')
+        else:
+            people = People(name, gender, sex_orientation, bloodtype,
+                            get_current_user().id)
+            db.add(people)
+            db.commit()
+            flash('welcome to people!')
+            return redirect(url_for('home'))
+    else:
+        flash('check the input form')
+    return redirect(url_for('new_people'))
+
+
+@app.route('/admin/users/')
+def user_list():
+    users = db.query(User).all()
+    return render_template('user_list.html', users=users)
 
 
 @app.route('/admin/createdb')

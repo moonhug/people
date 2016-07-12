@@ -8,6 +8,15 @@
     <h1>
         <a href="{{ url_for("home") }}">피플</a>
     </h1>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 </header>
 <main>
     {% block content %}
