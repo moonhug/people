@@ -35,6 +35,43 @@
             <option value="AB">AB형</option>
         </select>
     </div>
-    <button type="submit">피플 만들기</button>
+    <p>특징</p>
+    <div>
+      <label for="tendency">성향 : 내향적(1)<->외향적(5) </label>
+      <input type=number id="tendency" name="tendency" min="1" max="5"></input>
+    </div>
+    <div>
+        <label for="sense">감각 : 둔감함(1)<->섬세함(5) </label>
+        <input type=number id="sense" name="sense" min="1" max="5"></input>
+    </div>
+    <div>
+        <label for="worth">본인에게 중요한 가치:</label>
+        <select name="worth">
+            <option value="strength">체력</option>
+            <option value="mental">정신력</option>
+            <option value="intellect">지력</option>
+            <option value="look">외모</option>
+            <option value="charm">매력</option>
+            <option value="will">의지</option>
+            <option value="sincere">성실</option>
+            <option value="morals">도덕</option>
+            <option value="faith">신앙</option>
+        </select>
+    </div>
+    <div>
+        <label for="ideal">상대방에게 바라는 가치:</label>
+        <select name="ideal">
+            <option value="strength">체력</option>
+            <option value="mental">정신력</option>
+            <option value="intellect">지력</option>
+            <option value="look">외모</option>
+            <option value="charm">매력</option>
+            <option value="will">의지</option>
+            <option value="sincere">성실</option>
+            <option value="morals">도덕</option>
+            <option value="faith">신앙</option>
+        </select>
+    </div>
+    <p><button type="submit">피플 만들기</button></p>
 </form>
 {% endblock %}
