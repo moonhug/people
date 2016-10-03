@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
+import random
 
 
 Base = declarative_base()
@@ -193,12 +194,29 @@ def new_people():
     gender = request.form.get('gender')
     sex_orientation = request.form.get('sex_orientation')
     bloodtype = request.form.get('bloodtype')
+    strength = random.randrange(5, 11)
+    mental = random.randrange(5, 11)
+    intellect = random.randrange(5, 11)
+    look = random.randrange(5, 11)
+    charm = random.randrange(5, 11)
+    will = random.randrange(5, 11)
+    sincere = random.randrange(5, 11)
+    morals = random.randrange(5, 11)
+    faith = random.randrange(5, 11)
+    stress = 0
+    tendency = request.form.get('tendency')
+    sense = request.form.get('sense')
+    worth = request.form.get('worth')
+    ideal = request.form.get('ideal')
     if name:
         if db.query(People).filter(People.name == name).first():
             flash('name already exists')
         else:
             people = People(name, gender, sex_orientation, bloodtype,
-                            get_current_user().id)
+                            get_current_user().id,
+                            strength, mental, intellect, look, charm,
+                            will, sincere, morals, faith, stress,
+                            tendency, sense, worth, ideal)
             db.add(people)
             db.commit()
             flash('welcome to people!')
