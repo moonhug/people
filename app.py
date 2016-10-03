@@ -36,19 +36,52 @@ class People(Base):
     gender = Column(String)
     sex_orientation = Column(String)
     blood = Column(String)
+    strength = Column(Integer)
+    mental = Column(Integer)
+    intellect = Column(Integer)
+    look = Column(Integer)
+    charm = Column(Integer)
+    will = Column(Integer)
+    sincere = Column(Integer)
+    morals = Column(Integer)
+    faith = Column(Integer)
+    stress = Column(Integer)
+    tendency = Column(Integer)
+    sense = Column(Integer)
+    worth = Column(String)
+    ideal = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", back_populates="people")
 
-    def __init__(self, name, gender, sex_orientation, blood, user_id):
+    def __init__(self, name, gender, sex_orientation, blood, user_id,
+    strength, mental, intellect, look, charm, will, sincere, morals, faith,
+    stress, tendency, sense, worth, ideal):
         self.name = name
         self.gender = gender
         self.sex_orientation = sex_orientation
         self.blood = blood
         self.user_id = user_id
+        self.strength = strength
+        self.mental = mental
+        self.intellect = intellect
+        self.look = look
+        self.charm = charm
+        self.will = will
+        self.sincere = sincere
+        self.morals = morals
+        self.faith = faith
+        self.stress = stress
+        self.tendency = tendency
+        self.sense = sense
+        self.worth = worth
+        self.ideal = ideal
 
     def __repr__(self):
-        return "<People('%s', '%s', '%s', '%s')>" \
-               % (self.name, self.gender, self.sex_orientation, self.blood)
+        return "<People('%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%s', '%s')>" \
+               % (self.name, self.gender, self.sex_orientation, self.blood,
+               self.strength, self.mental, self.intellect, self.look,
+               self.charm, self.will, self.sincere, self.morals, self.faith,
+               self.stress, self.tendency, self.sense, self.worth, self.ideal)
 
 
 app = Flask(__name__)
