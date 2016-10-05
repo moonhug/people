@@ -50,15 +50,56 @@
 	<a href="{{ url_for('new_people') }}">피플 만들기</a>
 </p>
 {% if people %}
-    <h2>피플 목록</h2>
-    <ol>
-        {% for person in people %}
-        <li>{{ person }}</li>
-        {% endfor %}
-    </ol>
+<h2>피플 목록</h2>
+<ol>
+	<table border="1" class=table15_4>
+		<tr>
+			<th>이름</th>
+			<th>성별</th>
+			<th>지향성</th>
+			<th>나이</th>
+			<th>혈액형</th>
+			<th>체력</th>
+			<th>정신력</th>
+			<th>지력</th>
+			<th>외모</th>
+			<th>매력</th>
+			<th>의지</th>
+			<th>성실성</th>
+			<th>도덕성</th>
+			<th>신앙심</th>
+			<th>스트레스</th>
+			<th>성향</th>
+			<th>감각</th>
+			<th>상태</th>
+			<th>본인에게 중요한 가치</th>
+			<th>상대에게 바라는 가치</th>
+		</tr>
+		<tr>
+			{% for person in people %}
+			<td>{{ person.name }}</td>
+			<td> {{ person.gender }}</td>
+			<td>{{ person.sex_orientation }}</td>
+			<td>{{ person.age }}</td>
+			<td>{{ person.blood }}</td>
+			<td>{{ person.strength }}</td>
+			<td>{{ person.mental }}</td>
+			<td>{{ person.intellect }}</td>
+			<td>{{ person.look }}</td>
+			<td>{{ person.charm }}</td>
+			<td>{{ person.will }}</td>
+			<td>{{ person.sincere }}</td>
+			<td>{{ person.morals }}</td>
+			<td>{{ person.faith }}</td>
+			<td>{{ person.stress }}</td>
+			<td>{{ person.tendency }}</td>
+			<td>{{ person.sense }}</td>
+			<td>{{ person.condition }}</td>
+			<td>{{ person.worth }}</td>
+			<td>{{ person.ideal }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</ol>
 {% else %}
-<h2>피플이 없습니다.</h2>
-{% endif %}
-
-
-{% endblock %}
+<h2>피플이 없습니다.</h2> {% endif %} {% endblock %}
