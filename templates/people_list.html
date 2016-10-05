@@ -1,12 +1,53 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<style>
+	.table15_4 table {
+		width: 100%;
+		margin: 15px 0;
+		border: 0;
+	}
 
-{% block content %}
+	.table15_4 th {
+		font-weight: bold;
+		background-color: #e1dfe7;
+		color: #30205a
+	}
 
+	.table15_4,
+	.table15_4 th,
+	.table15_4 td {
+		font-size: 0.95em;
+		text-align: center;
+		padding: 4px;
+		border-collapse: collapse;
+	}
+
+	.table15_4 th {
+		border: 1px solid #e1dfe7;
+		border-width: 1px
+	}
+
+	.table15_4 td {
+		border: 1px solid #e1dfe7;
+		border-width: 1px
+	}
+
+	.table15_4 tr {
+		border: 1px solid #ffffff;
+	}
+
+	.table15_4 tr:nth-child(odd) {
+		background-color: #f7f7f7;
+	}
+
+	.table15_4 tr:nth-child(even) {
+		background-color: #ffffff;
+	}
+</style>
 <p>
-    <a href="{{ url_for('logout') }}">로그아웃</a>
+	<a href="{{ url_for('logout') }}">로그아웃</a>
 </p>
 <p>
-    <a href="{{ url_for('new_people') }}">피플 만들기</a>
+	<a href="{{ url_for('new_people') }}">피플 만들기</a>
 </p>
 {% if people %}
     <h2>피플 목록</h2>
