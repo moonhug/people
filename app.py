@@ -37,6 +37,7 @@ class People(Base):
     gender = Column(String)
     sex_orientation = Column(String)
     blood = Column(String)
+    age = Column(Integer)
     strength = Column(Integer)
     mental = Column(Integer)
     intellect = Column(Integer)
@@ -49,18 +50,20 @@ class People(Base):
     stress = Column(Integer)
     tendency = Column(Integer)
     sense = Column(Integer)
+    condition = Column(Integer)
     worth = Column(String)
     ideal = Column(String)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship("User", back_populates="people")
 
-    def __init__(self, name, gender, sex_orientation, blood, user_id,
+    def __init__(self, name, gender, sex_orientation, blood, age, user_id,
     strength, mental, intellect, look, charm, will, sincere, morals, faith,
-    stress, tendency, sense, worth, ideal):
+    stress, tendency, sense, condition, worth, ideal):
         self.name = name
         self.gender = gender
         self.sex_orientation = sex_orientation
         self.blood = blood
+        self.age = age
         self.user_id = user_id
         self.strength = strength
         self.mental = mental
@@ -74,15 +77,9 @@ class People(Base):
         self.stress = stress
         self.tendency = tendency
         self.sense = sense
+        self.condition = condition
         self.worth = worth
         self.ideal = ideal
-
-    def __repr__(self):
-        return "<People('%s', '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%d', '%s', '%s')>" \
-               % (self.name, self.gender, self.sex_orientation, self.blood,
-               self.strength, self.mental, self.intellect, self.look,
-               self.charm, self.will, self.sincere, self.morals, self.faith,
-               self.stress, self.tendency, self.sense, self.worth, self.ideal)
 
 
 app = Flask(__name__)
@@ -194,6 +191,7 @@ def new_people():
     gender = request.form.get('gender')
     sex_orientation = request.form.get('sex_orientation')
     bloodtype = request.form.get('bloodtype')
+    age = 0
     strength = random.randrange(5, 11)
     mental = random.randrange(5, 11)
     intellect = random.randrange(5, 11)
@@ -206,6 +204,7 @@ def new_people():
     stress = 0
     tendency = request.form.get('tendency')
     sense = request.form.get('sense')
+    condition = 0
     worth = request.form.get('worth')
     ideal = request.form.get('ideal')
     if name:
@@ -213,10 +212,10 @@ def new_people():
             flash('name already exists')
         else:
             people = People(name, gender, sex_orientation, bloodtype,
-                            get_current_user().id,
+                            age, get_current_user().id,
                             strength, mental, intellect, look, charm,
                             will, sincere, morals, faith, stress,
-                            tendency, sense, worth, ideal)
+                            tendency, sense, condition, worth, ideal)
             db.add(people)
             db.commit()
             flash('welcome to people!')
